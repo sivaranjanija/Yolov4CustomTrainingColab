@@ -13,11 +13,11 @@ Prediction based on yolov4:
 
 ## Dataset Preparation
 I collected 60 images for training, and labelled them using [Yolo_mark](https://github.com/AlexeyAB/Yolo_mark). Yolo_mark creates .txt file for each .jpg file in the same directory and with the same name. This labelled dataset is placed in a folder named `obj`. This folder should be placed under `data` folder in darknet which will be discussed further. I used a python script to extract the names of image files from `obj` folder and wrote it in `train.txt`. Each filename should be in new line, with path relative to darknet binary (i.e., data/obj). Example: If the obj folder contains 3 images named 1.jpg, 2.jpg, 3.jpg, then train.txt should contain: 
-`
+```
 data/obj/1.jpg 
 data/obj/2.jpg 
 data/obj/3.jpg
-`
+```
 Compresses the `obj` folder to `obj.tar.gz`
 
 ## Training Steps in Google Colab
@@ -26,7 +26,7 @@ Compresses the `obj` folder to `obj.tar.gz`
 
 * Install darknet in the current session following these commands in the notebook:
 
-`
+```
 !git clone https://github.com/AlexeyAB/darknet
 %cd darknet
 !sed -i 's/OPENCV=0/OPENCV=1/' Makefile
@@ -34,7 +34,7 @@ Compresses the `obj` folder to `obj.tar.gz`
 !sed -i 's/CUDNN=0/CUDNN=1/' Makefile
 !sed -i 's/CUDNN_HALF=0/CUDNN_HALF=1/' Makefile
 !make
-`
+```
 
 * Download pre-trained `yolov4.conv.137 weights`:
 
@@ -60,19 +60,20 @@ This will unzip obj.tar.gz inside data folder of darknet, such that the training
 
 * Create file `obj.data` in the directory `darknet\data\`, containing (where classes = number of objects):
 
-`
+```
 classes = 1
 train  = data/train.txt
 valid  = data/test.txt
 names = data/obj.names
 backup = backup/
-`
+```
 
 * Create a copy of the `darket` folder in your drive, so that you need not execute the above training steps again in another session if your GPU runtime has exceeded
 
-`from google.colab import drive
+```
+from google.colab import drive
 drive.mount('/content/drive')
-`
+```
 
 `
 !cp -r darknet drive/MyDrive/
@@ -95,3 +96,7 @@ drive.mount('/content/drive')
 ![predyolocustom.jpg](predyolocustom.jpg)
 
 
+## Further Steps
+* Collect more dataset for training
+* Train with mAP
+* Improve object detection
